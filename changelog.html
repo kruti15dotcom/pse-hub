@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Changelog — PSE Learning Hub</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  .page-hero {
+    background: linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%);
+    color: white; padding: 4rem 1.5rem 3.5rem; text-align: center;
+  }
+  .page-hero h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; margin-bottom: .5rem; }
+  .page-hero p  { font-size: 1.05rem; opacity: .82; max-width: 500px; margin: 0 auto; }
+
+  .timeline { max-width: 740px; margin: 0 auto; }
+  .cl-entry {
+    display: flex; gap: 1.5rem; padding-bottom: 2.75rem; position: relative;
+  }
+  .cl-entry:not(:last-child)::before {
+    content: ''; position: absolute; left: 19px; top: 42px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .cl-dot {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--blue); display: flex; align-items: center; justify-content: center;
+    z-index: 1; margin-top: .15rem;
+  }
+  .cl-dot svg { width: 18px; height: 18px; fill: none; stroke: white; stroke-width: 2.5; }
+  .cl-dot.latest { background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 0 0 4px var(--blue-l); }
+  .cl-body { flex: 1; }
+  .cl-meta { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; flex-wrap: wrap; }
+  .cl-ver  { font-size: .82rem; font-weight: 800; background: var(--blue); color: white; padding: .2rem .65rem; border-radius: 20px; }
+  .cl-date { font-size: .8rem; color: var(--muted); font-weight: 500; }
+  .cl-latest-badge { font-size: .72rem; font-weight: 700; background: var(--green-l); color: var(--green); padding: .18rem .55rem; border-radius: 20px; }
+  .cl-title { font-size: 1.15rem; font-weight: 800; margin-bottom: .6rem; }
+  .cl-notes { list-style: none; padding: 0; }
+  .cl-notes li {
+    font-size: .88rem; color: var(--muted); padding: .28rem 0 .28rem 1.4rem;
+    position: relative; line-height: 1.6;
+  }
+  .cl-notes li::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+  .cl-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.5rem; margin-top: .25rem;
+  }
+  .cl-card.highlight { border-color: var(--blue-l); background: var(--blue-xl); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <span class="nav-brand-name">PSE Learning Hub</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="features.html">Features</a>
+    <a href="install.html">Install</a>
+    <a href="changelog.html" class="active">Changelog</a>
+    <a href="admin.html" class="btn-nav">Admin Dashboard</a>
+  </div>
+  <button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="page-hero">
+  <span class="section-label" style="color:rgba(255,255,255,.65)">Release History</span>
+  <h1>What's New</h1>
+  <p>Every update to the PSE Learning Hub Chrome Extension, newest first.</p>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="timeline">
+
+      <!-- v1.5 -->
+      <div class="cl-entry">
+        <div class="cl-dot latest">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="cl-body">
+          <div class="cl-meta">
+            <span class="cl-ver">v1.5</span>
+            <span class="cl-date">November 2026</span>
+            <span class="cl-latest-badge">Latest</span>
+          </div>
+          <div class="cl-title">Admin Dashboard Website</div>
+          <div class="cl-card highlight">
+            <ul class="cl-notes">
+              <li><span class="pill pill-new">NEW</span> Live usage tracking — active users (7-day &amp; 30-day) and total sessions</li>
+              <li><span class="pill pill-new">NEW</span> PIN-protected admin dashboard website (this site)</li>
+              <li><span class="pill pill-new">NEW</span> Upload activity per team member with rankings</li>
+              <li><span class="pill pill-new">NEW</span> Heartbeat ping on extension open to log usage automatically</li>
+              <li><span class="pill pill-new">NEW</span> Multi-page website — Home, Features, Install, Changelog, Admin</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.4 -->
+      <div class="cl-entry">
+        <div class="cl-dot">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="cl-body">
+          <div class="cl-meta">
+            <span class="cl-ver">v1.4</span>
+            <span class="cl-date">November 2026</span>
+          </div>
+          <div class="cl-title">Reset All Docs — Demo Mode</div>
+          <div class="cl-card">
+            <ul class="cl-notes">
+              <li><span class="pill pill-new">NEW</span> Admin-only "Reset All Docs" button in the Diagnostics panel</li>
+              <li><span class="pill pill-new">NEW</span> Clears the entire Apps Script registry and local folder cache in one click</li>
+              <li><span class="pill pill-change">CHANGE</span> Useful for starting a fresh demo without manually deleting Drive files</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.3 -->
+      <div class="cl-entry">
+        <div class="cl-dot">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="cl-body">
+          <div class="cl-meta">
+            <span class="cl-ver">v1.3</span>
+            <span class="cl-date">November 2026</span>
+          </div>
+          <div class="cl-title">Delete Reliability &amp; Security</div>
+          <div class="cl-card">
+            <ul class="cl-notes">
+              <li><span class="pill pill-fix">FIX</span> Delete now works via Apps Script to bypass Salesforce org DLP policy (shareOutNotPermittedForContent)</li>
+              <li><span class="pill pill-fix">FIX</span> Fallback "delete by title" search when stored file ID is stale or mismatched</li>
+              <li><span class="pill pill-new">NEW</span> Only the uploader can delete their own documents — delete button hidden for others</li>
+              <li><span class="pill pill-fix">FIX</span> Stale cache overwrite after delete during background refresh now prevented</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.2 -->
+      <div class="cl-entry">
+        <div class="cl-dot">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="cl-body">
+          <div class="cl-meta">
+            <span class="cl-ver">v1.2</span>
+            <span class="cl-date">October 2026</span>
+          </div>
+          <div class="cl-title">Team Sharing &amp; Multi-User Support</div>
+          <div class="cl-card">
+            <ul class="cl-notes">
+              <li><span class="pill pill-new">NEW</span> Centralized Apps Script registry — all team members see each other's uploads</li>
+              <li><span class="pill pill-new">NEW</span> Uploader name displayed on every document card</li>
+              <li><span class="pill pill-new">NEW</span> Filter by team member in folder view</li>
+              <li><span class="pill pill-new">NEW</span> PSE Resources tab with admin PIN protection (pse2024)</li>
+              <li><span class="pill pill-fix">FIX</span> Race condition in registry save that caused uploads to disappear on refresh</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.1 -->
+      <div class="cl-entry">
+        <div class="cl-dot">
+          <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="cl-body">
+          <div class="cl-meta">
+            <span class="cl-ver">v1.1</span>
+            <span class="cl-date">October 2026</span>
+          </div>
+          <div class="cl-title">Google Shared Drive Integration</div>
+          <div class="cl-card">
+            <ul class="cl-notes">
+              <li><span class="pill pill-new">NEW</span> Files uploaded to PSE Learning Hub Shared Drive — team-owned, not personal Drive</li>
+              <li><span class="pill pill-new">NEW</span> Auto-creates customer folder and sub-folder structure on first upload</li>
+              <li><span class="pill pill-new">NEW</span> PROM Live Sheet sync — customer list stays in sync automatically</li>
+              <li><span class="pill pill-new">NEW</span> Special Instructions and Environment Details shown per customer realm</li>
+              <li><span class="pill pill-change">CHANGE</span> Switched to resumable uploads for reliable large-file support</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.0 -->
+      <div class="cl-entry">
+        <div class="cl-dot" style="background:var(--muted)">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="cl-body">
+          <div class="cl-meta">
+            <span class="cl-ver" style="background:var(--muted)">v1.0</span>
+            <span class="cl-date">September 2026</span>
+          </div>
+          <div class="cl-title">Initial Release</div>
+          <div class="cl-card">
+            <ul class="cl-notes">
+              <li><span class="pill pill-new">NEW</span> Chrome Extension for PSE team document and resource management</li>
+              <li><span class="pill pill-new">NEW</span> Browse customer realms and upload documents per folder</li>
+              <li><span class="pill pill-new">NEW</span> Built on Manifest V3, Google Drive API v3, Google Apps Script</li>
+              <li><span class="pill pill-new">NEW</span> Service account JWT authentication (RS256) for Drive operations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <span class="footer-brand-name">PSE Learning Hub</span>
+    </div>
+    <div class="footer-links">
+      <a href="features.html">Features</a><a href="install.html">Install</a>
+      <a href="changelog.html">Changelog</a><a href="admin.html">Admin</a>
+    </div>
+  </div>
+  <div class="footer-copy">Built by <strong style="color:white">Krutika Nikam</strong> · PSE Proactive Services Engineering · Salesforce · Internal use only</div>
+</footer>
+
+</body>
+</html>

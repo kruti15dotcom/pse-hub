@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard — PSE Learning Hub</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  /* ── PIN GATE ── */
+  #pin-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+  }
+  .pin-card {
+    background: white; border-radius: 20px; padding: 2.5rem 2rem;
+    width: 340px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,.35);
+  }
+  .pin-logo {
+    width: 64px; height: 64px; background: var(--blue); border-radius: 16px;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;
+  }
+  .pin-logo svg { width: 36px; height: 36px; fill: none; stroke: white; stroke-width: 2; }
+  .pin-card h1  { font-size: 1.25rem; font-weight: 700; }
+  .pin-card p   { font-size: .875rem; color: var(--muted); margin: .3rem 0 1.5rem; }
+  .pin-input {
+    width: 100%; padding: .75rem 1rem; border: 2px solid var(--border); border-radius: 10px;
+    font-size: 1rem; text-align: center; letter-spacing: .3rem; outline: none;
+    transition: border-color .15s;
+  }
+  .pin-input:focus { border-color: var(--blue); }
+  .pin-submit {
+    width: 100%; margin-top: .75rem; padding: .75rem;
+    background: var(--blue); color: white; border: none; border-radius: 10px;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: background .15s;
+  }
+  .pin-submit:hover { background: var(--blue-d); }
+  .pin-error { color: #dc2626; font-size: .8rem; margin-top: .5rem; min-height: 1.1rem; }
+  .pin-back  { margin-top: 1rem; font-size: .8rem; }
+  .pin-back a { color: var(--blue); text-decoration: none; }
+
+  /* ── DASHBOARD ── */
+  #dashboard { display: none; }
+
+  .dash-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+    color: white; padding: 1.5rem 2rem;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .dash-header-left { display: flex; align-items: center; gap: .875rem; }
+  .dash-logo {
+    width: 42px; height: 42px; background: rgba(255,255,255,.18); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dash-logo svg { width: 24px; height: 24px; fill: none; stroke: white; stroke-width: 2; }
+  .dash-header h1 { font-size: 1.15rem; font-weight: 700; }
+  .dash-header p  { font-size: .78rem; opacity: .75; margin-top: .1rem; }
+  .dash-header-right { display: flex; align-items: center; gap: .75rem; }
+  #last-updated { font-size: .78rem; opacity: .7; }
+  .btn-refresh {
+    background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3);
+    color: white; border-radius: 8px; padding: .4rem .9rem;
+    font-size: .82rem; cursor: pointer; transition: background .15s;
+  }
+  .btn-refresh:hover { background: rgba(255,255,255,.28); }
+  .btn-back-site {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    color: rgba(255,255,255,.8); border-radius: 8px; padding: .4rem .9rem;
+    font-size: .82rem; cursor: pointer; text-decoration: none; transition: background .15s;
+  }
+  .btn-back-site:hover { background: rgba(255,255,255,.22); color: white; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Stat cards */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem;
+  }
+  .stat-label { font-size: .78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .stat-value { font-size: 2.25rem; font-weight: 800; line-height: 1.1; margin: .35rem 0 .2rem; }
+  .stat-sub   { font-size: .78rem; color: var(--muted); }
+  .stat-card.blue   .stat-value { color: var(--blue);   }
+  .stat-card.green  .stat-value { color: var(--green);  }
+  .stat-card.amber  .stat-value { color: var(--amber);  }
+  .stat-card.purple .stat-value { color: var(--purple); }
+
+  /* Panels */
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+  @media (max-width: 720px) { .panels { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .panel-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .5rem; }
+  .panel-header h2 { font-size: .9rem; font-weight: 700; }
+  .count-pill { background: var(--blue-l); color: var(--blue); font-size: .72rem; font-weight: 700; padding: .15rem .5rem; border-radius: 20px; }
+  .panel-body { padding: .25rem 0; max-height: 320px; overflow-y: auto; }
+
+  /* Rows */
+  .data-row { display: flex; align-items: center; gap: .75rem; padding: .6rem 1.25rem; border-bottom: 1px solid #f1f5f9; font-size: .82rem; }
+  .data-row:last-child { border-bottom: none; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 800; flex-shrink: 0; color: white; }
+  .row-email { font-weight: 600; color: var(--text); }
+  .row-time  { color: var(--muted); font-size: .75rem; }
+  .row-action{ margin-left: auto; font-size: .72rem; color: var(--muted); flex-shrink: 0; }
+  .row-count { background: var(--blue-l); color: var(--blue); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: 20px; margin-left: auto; flex-shrink: 0; }
+  .row-active{ background: var(--green-l); color: var(--green); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: 20px; margin-left: auto; flex-shrink: 0; }
+
+  .loading { padding: 2rem; text-align: center; color: var(--muted); font-size: .85rem; }
+  .empty   { padding: 1.5rem; text-align: center; color: var(--muted); font-size: .82rem; }
+</style>
+</head>
+<body>
+
+<!-- PIN GATE -->
+<div id="pin-gate">
+  <div class="pin-card">
+    <div class="pin-logo">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <h1>Admin Dashboard</h1>
+    <p>PSE Learning Hub · Enter PIN to continue</p>
+    <input id="pin-input" class="pin-input" type="password" placeholder="••••••" maxlength="20" autocomplete="off" />
+    <button class="pin-submit" id="pin-submit">Unlock</button>
+    <div class="pin-error" id="pin-error"></div>
+    <div class="pin-back"><a href="index.html">← Back to site</a></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div class="dash-header-left">
+      <div class="dash-logo">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>PSE Learning Hub · Usage &amp; Activity</p>
+      </div>
+    </div>
+    <div class="dash-header-right">
+      <span id="last-updated"></span>
+      <a href="index.html" class="btn-back-site">← Site</a>
+      <button class="btn-refresh" onclick="loadStats()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <main>
+    <div class="stats-grid" id="stats-grid"><div class="loading">Loading stats…</div></div>
+
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><h2>Recent Activity</h2><span class="count-pill" id="act-badge">—</span></div>
+        <div class="panel-body" id="activity-list"><div class="loading">Loading…</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><h2>Uploads per Member</h2><span class="count-pill" id="up-badge">—</span></div>
+        <div class="panel-body" id="uploads-list"><div class="loading">Loading…</div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:2rem;">
+      <div class="panel-header"><h2>Active This Week</h2><span class="count-pill" id="active-badge">—</span></div>
+      <div class="panel-body" id="active-list"><div class="loading">Loading…</div></div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const SCRIPT_URL  = 'https://script.google.com/a/macros/salesforce.com/s/AKfycbxYkyFJBJYQjIcpsqQ3BO-IzjtKmjWpdhFC4TT2pEyCtu7Z67iooHITeq69oG7eb37Aag/exec';
+  const CORRECT_PIN = 'pse2024';
+
+  const pinInput  = document.getElementById('pin-input');
+  const pinSubmit = document.getElementById('pin-submit');
+  const pinError  = document.getElementById('pin-error');
+
+  function tryUnlock() {
+    if (pinInput.value.trim() === CORRECT_PIN) {
+      document.getElementById('pin-gate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      sessionStorage.setItem('pse_admin', '1');
+      loadStats();
+    } else {
+      pinError.textContent = 'Incorrect PIN.';
+      pinInput.value = ''; pinInput.focus();
+    }
+  }
+  pinSubmit.addEventListener('click', tryUnlock);
+  pinInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+  if (sessionStorage.getItem('pse_admin') === '1') {
+    document.getElementById('pin-gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadStats();
+  }
+
+  async function loadStats() {
+    ['stats-grid','activity-list','uploads-list','active-list'].forEach(id => {
+      document.getElementById(id).innerHTML = '<div class="loading">Loading…</div>';
+    });
+    try {
+      const r = await fetch(`${SCRIPT_URL}?method=stats&pin=${CORRECT_PIN}`);
+      const d = await r.json();
+      if (d.error) throw new Error(d.error);
+      render(d);
+    } catch(e) {
+      document.getElementById('stats-grid').innerHTML =
+        `<div class="loading" style="color:#dc2626">Failed: ${e.message}</div>`;
+    }
+  }
+
+  function render(d) {
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card blue"><div class="stat-label">Active This Week</div><div class="stat-value">${d.activeUsers7d}</div><div class="stat-sub">unique users (7 days)</div></div>
+      <div class="stat-card green"><div class="stat-label">Active This Month</div><div class="stat-value">${d.activeUsers30d}</div><div class="stat-sub">unique users (30 days)</div></div>
+      <div class="stat-card amber"><div class="stat-label">Total Users Ever</div><div class="stat-value">${d.totalUsers}</div><div class="stat-sub">${d.totalSessions} sessions total</div></div>
+      <div class="stat-card purple"><div class="stat-label">Docs Uploaded</div><div class="stat-value">${d.totalDocs}</div><div class="stat-sub">across all realms</div></div>
+    `;
+    document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+    document.getElementById('act-badge').textContent = d.recentActivity.length;
+    document.getElementById('activity-list').innerHTML = d.recentActivity.length
+      ? d.recentActivity.map(a => `<div class="data-row">${av(a.email)}<div><div class="row-email">${sh(a.email)}</div><div class="row-time">${rt(a.timestamp)}</div></div><div class="row-action">${a.action||'open'}</div></div>`).join('')
+      : '<div class="empty">No activity yet</div>';
+
+    document.getElementById('up-badge').textContent = d.uploadsPerUser.length;
+    document.getElementById('uploads-list').innerHTML = d.uploadsPerUser.length
+      ? d.uploadsPerUser.map(u => `<div class="data-row">${av(u.email)}<div class="row-email" style="flex:1" title="${u.email}">${sh(u.email)}</div><span class="row-count">${u.count} doc${u.count!==1?'s':''}</span></div>`).join('')
+      : '<div class="empty">No uploads yet</div>';
+
+    document.getElementById('active-badge').textContent = d.activeUserList.length;
+    document.getElementById('active-list').innerHTML = d.activeUserList.length
+      ? d.activeUserList.map(e => `<div class="data-row">${av(e)}<div class="row-email" style="flex:1">${sh(e)}</div><span class="row-active">Active</span></div>`).join('')
+      : '<div class="empty">No active users this week yet</div>';
+  }
+
+  const COLORS = ['#2563eb','#7c3aed','#16a34a','#d97706','#dc2626','#0891b2','#be185d','#065f46'];
+  function clr(e) { let h=0; for(let i=0;i<e.length;i++) h=(h*31+e.charCodeAt(i))&0xffff; return COLORS[h%COLORS.length]; }
+  function ini(e) { const n=e.split('@')[0].replace(/[._]/g,' ').trim().split(' ').filter(Boolean); return (n.length>=2?n[0][0]+n[1][0]:n[0].slice(0,2)).toUpperCase(); }
+  function av(e)  { return `<div class="avatar" style="background:${clr(e)}">${ini(e)}</div>`; }
+  function sh(e)  { return e.replace(/@salesforce\.com$/,'').replace(/@gmail\.com$/,''); }
+  function rt(ts) { if(!ts) return ''; const m=Math.floor((Date.now()-new Date(ts))/60000); if(m<1) return 'just now'; if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; const d=Math.floor(h/24); return d<7?d+'d ago':new Date(ts).toLocaleDateString(); }
+</script>
+</body>
+</html>

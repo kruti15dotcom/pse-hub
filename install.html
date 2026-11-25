@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Install — PSE Learning Hub</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  .page-hero {
+    background: linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%);
+    color: white; padding: 4rem 1.5rem 3.5rem; text-align: center;
+  }
+  .page-hero h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; margin-bottom: .5rem; }
+  .page-hero p  { font-size: 1.05rem; opacity: .82; max-width: 500px; margin: 0 auto; }
+
+  /* Steps */
+  .steps-wrap { max-width: 680px; margin: 3rem auto 0; }
+  .step {
+    display: flex; gap: 1.5rem; padding-bottom: 2.5rem; position: relative;
+  }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 19px; top: 42px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .step-num {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--blue); color: white; font-weight: 800; font-size: .9rem;
+    display: flex; align-items: center; justify-content: center; z-index: 1; margin-top: .15rem;
+  }
+  .step-body h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .4rem; }
+  .step-body p  { font-size: .9rem; color: var(--muted); line-height: 1.7; }
+  .step-body .tip {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: var(--blue-xl); border: 1px solid var(--blue-l);
+    color: var(--blue); border-radius: 8px; padding: .5rem .9rem;
+    font-size: .82rem; font-weight: 600; margin-top: .75rem;
+  }
+  .code-box {
+    background: #0f172a; color: #e2e8f0; border-radius: 10px;
+    padding: .9rem 1.1rem; font-family: monospace; font-size: .85rem;
+    margin-top: .75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .copy-btn {
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    color: rgba(255,255,255,.75); border-radius: 6px; padding: .3rem .7rem;
+    font-size: .75rem; cursor: pointer; white-space: nowrap; transition: background .15s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,.2); color: white; }
+
+  /* Download card */
+  .download-card {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    border-radius: 16px; padding: 2rem 2rem; color: white;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1.5rem; flex-wrap: wrap; margin-bottom: 3rem;
+  }
+  .download-card h2 { font-size: 1.3rem; font-weight: 700; }
+  .download-card p  { font-size: .85rem; opacity: .75; margin-top: .3rem; }
+
+  /* FAQ */
+  .faq { max-width: 680px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
+  .faq-q { font-size: .95rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .faq-q svg { flex-shrink: 0; transition: transform .2s; }
+  .faq-q.open svg { transform: rotate(180deg); }
+  .faq-a { font-size: .875rem; color: var(--muted); line-height: 1.7; margin-top: .75rem; display: none; }
+  .faq-a.open { display: block; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <span class="nav-brand-name">PSE Learning Hub</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="features.html">Features</a>
+    <a href="install.html" class="active">Install</a>
+    <a href="changelog.html">Changelog</a>
+    <a href="admin.html" class="btn-nav">Admin Dashboard</a>
+  </div>
+  <button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="page-hero">
+  <span class="section-label" style="color:rgba(255,255,255,.65)">Get Started</span>
+  <h1>Install in under 2 minutes</h1>
+  <p>No App Store. Load it directly in Chrome as an unpacked extension — it's simpler than it sounds.</p>
+</div>
+
+<section>
+  <div class="section-inner">
+
+    <!-- Download card -->
+    <div class="download-card">
+      <div>
+        <h2>Step 0 — Download the Extension</h2>
+        <p>Get the latest ZIP file from Krutika or download it below.</p>
+      </div>
+      <a href="PSELearningHub-Extension.zip" class="btn-white" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="17" height="17"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download ZIP
+      </a>
+    </div>
+
+    <div class="steps-wrap">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Unzip the downloaded file</h3>
+          <p>Double-click the ZIP to extract it. You'll get a folder called <strong>PSELearningHub-Extension</strong> — keep this folder somewhere easy to find (e.g. your Desktop or Documents).</p>
+          <div class="tip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Do not move or delete this folder after installing — Chrome loads from it directly.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Open Chrome Extensions page</h3>
+          <p>In Chrome, copy and paste this URL into the address bar and press Enter:</p>
+          <div class="code-box">
+            <span>chrome://extensions</span>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText('chrome://extensions');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Turn on Developer Mode</h3>
+          <p>In the top-right corner of the Extensions page, toggle on <strong>Developer mode</strong>. Three new buttons will appear — "Load unpacked", "Pack extension", "Update".</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Load the unpacked extension</h3>
+          <p>Click <strong>Load unpacked</strong>, then in the file picker, navigate to and select the <strong>PSELearningHub-Extension</strong> folder you unzipped in Step 1. Click <strong>Select</strong>.</p>
+          <div class="tip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            The PSE Learning Hub icon will appear in your Chrome toolbar.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Pin the extension (optional but recommended)</h3>
+          <p>Click the puzzle piece icon 🧩 in the Chrome toolbar, find <strong>PSE Learning Hub</strong>, and click the pin icon to keep it always visible in the toolbar.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>Open and you're done!</h3>
+          <p>Click the PSE Learning Hub icon in your toolbar. It will sign you in automatically using your Chrome Salesforce account. You should see your customer realms appear within a few seconds.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <h2 style="font-size:1.5rem;font-weight:800;margin:3.5rem 0 1.5rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Why can't I see my customer realms after installing?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Make sure you're signed into Chrome with your <strong>Salesforce Google account</strong>. The extension uses your Chrome profile identity to identify you. If you're signed in with a personal Gmail, switch to your Salesforce account in Chrome settings.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do I need to do anything when there's a new version?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes — download the new ZIP, unzip it, then go to <code style="background:var(--bg);padding:.1rem .4rem;border-radius:4px;font-size:.85rem;">chrome://extensions</code>, find PSE Learning Hub, and click <strong>Remove</strong>. Then repeat steps 3–4 above with the new folder.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Will my uploads be visible to the whole team?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes. All uploads go into the team's Google Shared Drive and are registered in a central registry. Any team member who has the extension installed will see your upload the next time they open it.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What file types can I upload?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Any file type — PDF, PPTX, DOCX, XLSX, MP4, PNG, etc. You can also add external links (like a Grafana URL or Confluence page) instead of uploading a file.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can I delete someone else's document?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">No. The delete button only appears on documents <strong>you</strong> uploaded. This prevents accidental deletion of other team members' work.</div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <span class="footer-brand-name">PSE Learning Hub</span>
+    </div>
+    <div class="footer-links">
+      <a href="features.html">Features</a><a href="install.html">Install</a>
+      <a href="changelog.html">Changelog</a><a href="admin.html">Admin</a>
+    </div>
+  </div>
+  <div class="footer-copy">Built by <strong style="color:white">Krutika Nikam</strong> · PSE Proactive Services Engineering · Salesforce · Internal use only</div>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+</script>
+</body>
+</html>

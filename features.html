@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Features — PSE Learning Hub</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  .page-hero {
+    background: linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%);
+    color: white; padding: 4rem 1.5rem 3.5rem; text-align: center;
+  }
+  .page-hero h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; margin-bottom: .5rem; }
+  .page-hero p  { font-size: 1.05rem; opacity: .82; max-width: 500px; margin: 0 auto; }
+
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .feat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 2rem; transition: box-shadow .2s, transform .2s;
+  }
+  .feat-card:hover { box-shadow: 0 8px 32px rgba(37,99,235,.12); transform: translateY(-2px); }
+  .feat-card .card-icon { margin-bottom: 1.25rem; }
+  .feat-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .6rem; }
+  .feat-card p  { font-size: .9rem; color: var(--muted); line-height: 1.7; }
+  .feat-card ul { margin-top: .75rem; padding-left: 0; list-style: none; }
+  .feat-card ul li {
+    font-size: .85rem; color: var(--muted); padding: .2rem 0 .2rem 1.25rem;
+    position: relative;
+  }
+  .feat-card ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+
+  .highlight-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;
+    margin-top: 4rem; padding-top: 4rem; border-top: 1px solid var(--border);
+  }
+  .highlight-row.reverse { direction: rtl; }
+  .highlight-row.reverse > * { direction: ltr; }
+  .highlight-text h2  { font-size: 1.75rem; font-weight: 800; line-height: 1.2; margin-bottom: .75rem; }
+  .highlight-text p   { font-size: .95rem; color: var(--muted); line-height: 1.7; }
+  .highlight-visual {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    border-radius: 16px; padding: 1.75rem; color: white;
+  }
+  .vis-row {
+    display: flex; align-items: center; gap: .75rem; padding: .6rem .75rem;
+    background: rgba(255,255,255,.1); border-radius: 8px; margin-bottom: .5rem;
+    font-size: .82rem;
+  }
+  .vis-row:last-child { margin-bottom: 0; }
+  .vis-avatar {
+    width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .65rem; font-weight: 800; flex-shrink: 0; color: white;
+  }
+  .vis-info  { flex: 1; }
+  .vis-title { font-weight: 600; color: white; font-size: .8rem; }
+  .vis-meta  { font-size: .7rem; opacity: .65; }
+  .vis-badge {
+    font-size: .65rem; font-weight: 700; padding: .15rem .45rem;
+    border-radius: 4px; background: rgba(255,255,255,.2); flex-shrink: 0;
+  }
+  @media (max-width: 680px) {
+    .highlight-row { grid-template-columns: 1fr; }
+    .highlight-row.reverse { direction: ltr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <span class="nav-brand-name">PSE Learning Hub</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="features.html" class="active">Features</a>
+    <a href="install.html">Install</a>
+    <a href="changelog.html">Changelog</a>
+    <a href="admin.html" class="btn-nav">Admin Dashboard</a>
+  </div>
+  <button class="nav-mobile-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="page-hero">
+  <span class="section-label" style="color:rgba(255,255,255,.65)">Features</span>
+  <h1>Everything your team needs</h1>
+  <p>Built specifically for Proactive Services Engineering — no extra servers, no extra logins.</p>
+</div>
+
+<section>
+  <div class="section-inner">
+
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Organized by Customer Realm</h3>
+        <p>Resources are grouped by customer account and sub-folder — so you always know exactly where to look.</p>
+        <ul>
+          <li>Folders: Trend Review, QBR, Implementation, and more</li>
+          <li>Synced live from your PROM Live Google Sheet</li>
+          <li>Search across all realms from one place</li>
+        </ul>
+      </div>
+
+      <div class="feat-card">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <h3>One-Click Upload to Drive</h3>
+        <p>Upload any file directly from the extension popup. No manual Drive navigation — the right folder is created automatically.</p>
+        <ul>
+          <li>Supports any file type (PDF, PPTX, DOCX, MP4...)</li>
+          <li>Or paste a URL for external links</li>
+          <li>File goes straight into the team's Google Shared Drive</li>
+        </ul>
+      </div>
+
+      <div class="feat-card">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Real-Time Team Sharing</h3>
+        <p>All team members see each other's uploads instantly. Uploader name and timestamp shown on every document card.</p>
+        <ul>
+          <li>No manual "Share" steps needed</li>
+          <li>Filter by team member to see who uploaded what</li>
+          <li>Centralized registry via Google Apps Script</li>
+        </ul>
+      </div>
+
+      <div class="feat-card">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h3>Uploader-Only Delete</h3>
+        <p>Only the person who uploaded a file can delete it. This keeps the shared space clean without giving everyone full edit rights.</p>
+        <ul>
+          <li>Automatic ownership tracking on every upload</li>
+          <li>Delete button only appears for your own files</li>
+          <li>Files safely removed from both app and Drive</li>
+        </ul>
+      </div>
+
+      <div class="feat-card">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3>Live PROM Sheet Sync</h3>
+        <p>The customer list stays automatically in sync with your PROM Live Google Sheet — new accounts appear without any manual updates.</p>
+        <ul>
+          <li>Pulls Realm ID, Customer Name, Status, Environment Details</li>
+          <li>Syncs on demand with one button click</li>
+          <li>Special Instructions displayed per customer</li>
+        </ul>
+      </div>
+
+      <div class="feat-card">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>PSE Resources Tab</h3>
+        <p>A separate admin-protected section for team-wide resources — training docs, quick links, and internal guides not tied to any customer.</p>
+        <ul>
+          <li>PIN-protected admin mode (only Krutika can add/delete)</li>
+          <li>Categories, featured resources, and search</li>
+          <li>Quick links for the whole team</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Highlight: Team sharing -->
+    <div class="highlight-row">
+      <div class="highlight-text">
+        <span class="section-label">Team Collaboration</span>
+        <h2>Everyone sees everything, instantly</h2>
+        <p>When any team member uploads a document, it appears for all 40+ members the next time they open the extension. No email threads with Drive links. No "did you share this with me?" questions.</p>
+        <p style="margin-top:.75rem;">Every card shows the uploader's name and how long ago it was added — so context is always there.</p>
+      </div>
+      <div class="highlight-visual">
+        <div class="vis-row">
+          <div class="vis-avatar">KN</div>
+          <div class="vis-info"><div class="vis-title">Trend Analysis - Q3 2026.pptx</div><div class="vis-meta">krutika.nikam · 2 days ago</div></div>
+          <div class="vis-badge">DOCUMENT</div>
+        </div>
+        <div class="vis-row">
+          <div class="vis-avatar">KS</div>
+          <div class="vis-info"><div class="vis-title">QBR Recording Oct 2026.mp4</div><div class="vis-meta">ksalavemula · 1 week ago</div></div>
+          <div class="vis-badge">VIDEO</div>
+        </div>
+        <div class="vis-row">
+          <div class="vis-avatar">KN</div>
+          <div class="vis-info"><div class="vis-title">Grafana - ATS Dashboard</div><div class="vis-meta">krutika.nikam · 3 days ago</div></div>
+          <div class="vis-badge">LINK</div>
+        </div>
+        <div class="vis-row">
+          <div class="vis-avatar">KS</div>
+          <div class="vis-info"><div class="vis-title">Implementation Plan v2.docx</div><div class="vis-meta">ksalavemula · just now</div></div>
+          <div class="vis-badge">DOCUMENT</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <span class="footer-brand-name">PSE Learning Hub</span>
+    </div>
+    <div class="footer-links">
+      <a href="features.html">Features</a><a href="install.html">Install</a>
+      <a href="changelog.html">Changelog</a><a href="admin.html">Admin</a>
+    </div>
+  </div>
+  <div class="footer-copy">Built by <strong style="color:white">Krutika Nikam</strong> · PSE Proactive Services Engineering · Salesforce · Internal use only</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PSE Learning Hub — Chrome Extension</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:   #2563eb;
+    --blue-d: #1d4ed8;
+    --blue-l: #dbeafe;
+    --text:   #0f172a;
+    --muted:  #64748b;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --radius: 14px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text); background: #fff; line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: .875rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: .625rem; text-decoration: none; }
+  .nav-icon {
+    width: 34px; height: 34px; background: var(--blue); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .nav-icon svg { width: 20px; height: 20px; fill: none; stroke: white; stroke-width: 2; }
+  .nav-brand span { font-weight: 700; font-size: .95rem; color: var(--text); }
+  .nav-links { display: flex; align-items: center; gap: 1.75rem; }
+  .nav-links a { font-size: .875rem; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .nav-links a:hover { color: var(--blue); }
+  .btn-nav {
+    background: var(--blue); color: white; padding: .5rem 1.1rem; border-radius: 8px;
+    font-size: .875rem; font-weight: 600; text-decoration: none; transition: background .15s;
+  }
+  .btn-nav:hover { background: var(--blue-d); color: white; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 45%, #3b82f6 100%);
+    color: white; text-align: center;
+    padding: 6rem 1.5rem 5rem;
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3);
+    padding: .3rem .9rem; border-radius: 20px; font-size: .78rem; font-weight: 600;
+    letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1;
+    max-width: 760px; margin: 0 auto .75rem;
+  }
+  .hero h1 span { opacity: .75; }
+  .hero p {
+    font-size: clamp(.95rem, 2vw, 1.2rem); opacity: .85; max-width: 560px;
+    margin: 0 auto 2.5rem;
+  }
+  .hero-cta { display: flex; align-items: center; justify-content: center; gap: .875rem; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: white; color: var(--blue); padding: .875rem 1.75rem;
+    border-radius: 10px; font-size: 1rem; font-weight: 700; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.22); color: var(--blue-d); }
+  .btn-primary svg { width: 18px; height: 18px; }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
+    color: white; padding: .875rem 1.75rem; border-radius: 10px;
+    font-size: 1rem; font-weight: 600; text-decoration: none; transition: background .15s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,.25); color: white; }
+  .hero-note { margin-top: 1.25rem; font-size: .8rem; opacity: .6; }
+
+  /* ── PREVIEW WINDOW ── */
+  .preview-wrap {
+    max-width: 480px; margin: 3rem auto 0;
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 16px; overflow: hidden;
+  }
+  .preview-bar {
+    background: rgba(0,0,0,.2); padding: .6rem 1rem;
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .preview-dot.r { background: #ff5f57; }
+  .preview-dot.y { background: #ffbd2e; }
+  .preview-dot.g { background: #28ca42; }
+  .preview-body { padding: 1.25rem; }
+  .preview-tabs {
+    display: flex; gap: .5rem; margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,.2); padding-bottom: .75rem;
+  }
+  .preview-tab {
+    font-size: .78rem; font-weight: 600; color: rgba(255,255,255,.6);
+    padding: .3rem .75rem; border-radius: 6px; cursor: default;
+  }
+  .preview-tab.active { background: rgba(255,255,255,.18); color: white; }
+  .preview-cards { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+  .preview-card {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 8px; padding: .75rem; font-size: .72rem; color: rgba(255,255,255,.85);
+  }
+  .preview-card-tag {
+    display: inline-block; background: rgba(255,255,255,.2); border-radius: 4px;
+    font-size: .65rem; font-weight: 700; padding: .1rem .4rem; margin-bottom: .4rem;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .preview-card-title { font-weight: 600; line-height: 1.3; color: white; }
+  .preview-card-meta { color: rgba(255,255,255,.55); margin-top: .3rem; }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 1.5rem; }
+  .section-inner { max-width: 1060px; margin: 0 auto; }
+  .section-label {
+    font-size: .78rem; font-weight: 700; color: var(--blue); text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: .5rem;
+  }
+  .section-title { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 800; line-height: 1.2; }
+  .section-sub { font-size: 1rem; color: var(--muted); margin-top: .5rem; max-width: 540px; }
+
+  /* ── FEATURES ── */
+  .features-bg { background: var(--bg); }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem; margin-top: 3rem;
+  }
+  .feature-card {
+    background: white; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.75rem;
+  }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 10px; background: var(--blue-l);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+  }
+  .feature-icon svg { width: 22px; height: 22px; stroke: var(--blue); fill: none; stroke-width: 2; }
+  .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+  .feature-card p  { font-size: .875rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── HOW IT WORKS ── */
+  .steps { display: flex; flex-direction: column; gap: 0; margin-top: 3rem; max-width: 640px; }
+  .step { display: flex; gap: 1.25rem; padding-bottom: 2rem; position: relative; }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 19px; top: 40px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .step-num {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--blue); color: white; font-weight: 800; font-size: .9rem;
+    display: flex; align-items: center; justify-content: center; z-index: 1;
+  }
+  .step-content h3 { font-size: 1rem; font-weight: 700; padding-top: .5rem; }
+  .step-content p  { font-size: .875rem; color: var(--muted); margin-top: .25rem; line-height: 1.6; }
+  .step-content code {
+    display: inline-block; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: .2rem .55rem; font-size: .8rem; font-family: monospace;
+    color: var(--blue); margin-top: .4rem;
+  }
+
+  /* ── INSTALL ── */
+  .install-bg { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #3b82f6 100%); color: white; }
+  .install-bg .section-label { color: rgba(255,255,255,.65); }
+  .install-bg .section-title { color: white; }
+  .install-bg .section-sub   { color: rgba(255,255,255,.75); }
+  .install-steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; margin-top: 2.5rem;
+  }
+  .install-step {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: var(--radius); padding: 1.5rem 1.25rem;
+  }
+  .install-step-num {
+    width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.25);
+    color: white; font-weight: 800; font-size: .85rem;
+    display: flex; align-items: center; justify-content: center; margin-bottom: .875rem;
+  }
+  .install-step h3 { font-size: .9rem; font-weight: 700; color: white; margin-bottom: .3rem; }
+  .install-step p  { font-size: .8rem; color: rgba(255,255,255,.7); line-height: 1.55; }
+  .install-cta { margin-top: 2.5rem; display: flex; gap: .875rem; flex-wrap: wrap; }
+
+  /* ── TECH STACK ── */
+  .stack-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem; margin-top: 2.5rem;
+  }
+  .stack-card {
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem;
+    text-align: center; background: white;
+  }
+  .stack-card .stack-icon { font-size: 1.75rem; margin-bottom: .5rem; }
+  .stack-card h4 { font-size: .875rem; font-weight: 700; }
+  .stack-card p  { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text); color: rgba(255,255,255,.65);
+    text-align: center; padding: 2rem 1.5rem; font-size: .82rem;
+  }
+  footer strong { color: white; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero { padding: 4rem 1.25rem 3.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <span>PSE Learning Hub</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#tech">Tech Stack</a>
+    <a href="#install" class="btn-nav">Get Extension</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge">Salesforce PSE Team · Internal Tool</div>
+  <h1>Your Team's Knowledge,<br/><span>Always One Click Away</span></h1>
+  <p>PSE Learning Hub is a Chrome Extension that lets your team upload, organize, and access customer documents and resources — directly from your browser.</p>
+  <div class="hero-cta">
+    <a href="#install" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Extension
+    </a>
+    <a href="#features" class="btn-secondary">
+      See Features →
+    </a>
+  </div>
+  <p class="hero-note">Chrome Extension · Manifest V3 · Google Shared Drive</p>
+
+  <!-- Mini app preview -->
+  <div class="preview-wrap">
+    <div class="preview-bar">
+      <div class="preview-dot r"></div>
+      <div class="preview-dot y"></div>
+      <div class="preview-dot g"></div>
+    </div>
+    <div class="preview-body">
+      <div class="preview-tabs">
+        <div class="preview-tab">PSE Resources</div>
+        <div class="preview-tab active">Customer Realms</div>
+      </div>
+      <div class="preview-cards">
+        <div class="preview-card">
+          <div class="preview-card-tag">Document</div>
+          <div class="preview-card-title">Trend Analysis - Q3 2026</div>
+          <div class="preview-card-meta">krutika.nikam • 2d ago</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-card-tag">Video</div>
+          <div class="preview-card-title">QBR Recording - Oct 2026</div>
+          <div class="preview-card-meta">ksalavemula • 1w ago</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-card-tag">External Link</div>
+          <div class="preview-card-title">Grafana Dashboard</div>
+          <div class="preview-card-meta">krutika.nikam • 3d ago</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-card-tag">Document</div>
+          <div class="preview-card-title">Implementation Plan</div>
+          <div class="preview-card-meta">ksalavemula • just now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features-bg" id="features">
+  <div class="section-inner">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything your team needs</h2>
+    <p class="section-sub">Built for Proactive Services Engineering — no extra servers, no extra logins.</p>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Organized by Customer</h3>
+        <p>Resources are grouped by customer realm — Trend Review, QBR, Implementation — so you always find what you need instantly.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <h3>One-Click Upload</h3>
+        <p>Upload any file directly from the extension. It's automatically stored in the team's Google Shared Drive — no manual folder navigation needed.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Shared Across the Team</h3>
+        <p>Every team member sees all uploaded documents. Uploader name and timestamp are shown on every card — full visibility, no silos.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>Uploader-Only Delete</h3>
+        <p>Only the person who uploaded a file can delete it. This keeps the shared space clean without giving everyone full edit rights.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Live Realm Sync</h3>
+        <p>Customer list stays automatically in sync with the PROM Live Sheet — new accounts appear without any manual updates to the app.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>PSE Resources Tab</h3>
+        <p>A separate admin-protected section for team-wide resources — training docs, quick links, and internal guides — not tied to any customer.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Simple upload flow</h2>
+    <p class="section-sub">From install to your first uploaded document in under 3 minutes.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Install the Extension</h3>
+          <p>Download the ZIP, go to <code>chrome://extensions</code>, enable Developer Mode, and load the unpacked folder. Done in under a minute.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Sign In Automatically</h3>
+          <p>The app uses your existing Chrome Salesforce account — no separate login needed. It identifies you automatically on first open.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Browse by Customer Realm</h3>
+          <p>Click the Customer Realms tab, search for your account, and pick a folder like <code>Trend Review</code> or <code>QBR</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Upload or Add a Link</h3>
+          <p>Click <strong>+ Add</strong>, choose a file from your machine (or paste a URL), fill in the title, and hit Save. The file lands in the team's Google Shared Drive automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Your Team Sees It Instantly</h3>
+          <p>All team members see the new document the next time they open the extension — no refresh, no manual sharing needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTALL ── -->
+<section class="install-bg" id="install">
+  <div class="section-inner">
+    <div class="section-label">Get Started</div>
+    <h2 class="section-title">Install in 4 steps</h2>
+    <p class="section-sub">No app store needed. Load it directly in Chrome as an unpacked extension.</p>
+
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="install-step-num">1</div>
+        <h3>Download the ZIP</h3>
+        <p>Click the button below to download the latest extension ZIP file.</p>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">2</div>
+        <h3>Extract the ZIP</h3>
+        <p>Unzip the file. You'll get a folder called <strong>PSELearningHub-Extension</strong>.</p>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">3</div>
+        <h3>Open Chrome Extensions</h3>
+        <p>In Chrome, go to <strong>chrome://extensions</strong> and turn on <strong>Developer mode</strong> (top-right toggle).</p>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">4</div>
+        <h3>Load the Folder</h3>
+        <p>Click <strong>Load unpacked</strong> and select the extracted <strong>PSELearningHub-Extension</strong> folder.</p>
+      </div>
+    </div>
+
+    <div class="install-cta">
+      <a href="PSELearningHub-Extension.zip" class="btn-primary" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PSELearningHub-Extension.zip
+      </a>
+    </div>
+    <p style="margin-top:1rem;font-size:.78rem;opacity:.6;">Internal use only · Salesforce PSE Team · Chrome 100+</p>
+  </div>
+</section>
+
+<!-- ── TECH STACK ── -->
+<section id="tech">
+  <div class="section-inner">
+    <div class="section-label">Tech Stack</div>
+    <h2 class="section-title">Built on tools you already use</h2>
+    <p class="section-sub">Zero external servers. Zero recurring costs. Everything runs on Google's infrastructure.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-icon">🧩</div>
+        <h4>Chrome Extension</h4>
+        <p>Manifest V3 · HTML, CSS, JS</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">📁</div>
+        <h4>Google Drive</h4>
+        <p>Shared Drive · Drive API v3</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">⚡</div>
+        <h4>Apps Script</h4>
+        <p>Serverless backend · Registry API</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">📊</div>
+        <h4>Google Sheets</h4>
+        <p>PROM Live Sheet · Usage Logs</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🔐</div>
+        <h4>Service Account</h4>
+        <p>GCP · RS256 JWT Auth</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🌐</div>
+        <h4>GitHub Pages</h4>
+        <p>Static hosting · This site</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>Built by <strong>Krutika Nikam</strong> · PSE Proactive Services Engineering · Salesforce</p>
+  <p style="margin-top:.4rem;font-size:.75rem;opacity:.6;">Internal tool · Not for public distribution</p>
+</footer>
+
+</body>
+</html>
